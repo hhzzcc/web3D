@@ -22,8 +22,8 @@ const start = async () => {
 
     const camera = new CameraPerspective({ fov: Math.PI / 6, aspect: window.innerWidth / window.innerHeight });
 
-    // const geometry = new GeometryCube({ l: 1, w: 1, h: 1 });
-    const geometry = new GeometrySphare();
+    const geometry = new GeometryCube({ l: 1, w: 1, h: 1 });
+    // const geometry = new GeometrySphare();
     const image = await loadImage('../assets/imgs/bg.jpeg');
     const image1 = await loadImage('../assets/imgs/earth.jpeg');
 
