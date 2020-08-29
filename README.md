@@ -5,7 +5,7 @@
 
 ## 创建一个地球、一个木块 [Demo链接](https://hhzzcc.github.io/web3D/views/public/index.html)
 
-```java
+```javascript
 // javascript index.js
 import { Web3D } from './web3D/index.js';
 import { CameraPerspective } from './web3D/camera/index.js';
@@ -72,6 +72,7 @@ const start = async () => {
     earthMesh.setPosition({ x: 0, y: 1, z: 2 });
     boxMesh.setPosition({ x: 0, y: -1, z: 0 });
 
+    // 帧循环动画
     const animated = () => {
         boxMesh.rotate({ x: 1, y: 1, z: 0, delta: 0.01 });
         earthMesh.rotate({ x: 0, y: 1, z: 0, delta: 0.01 });
