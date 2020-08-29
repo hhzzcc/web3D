@@ -1,9 +1,9 @@
 ## Web3D
 
-## 使用原生webgl打造类似three.js的简单3d框架，属于个人周末空闲时间创造的玩具，顺便练练手
+#### 使用原生webgl打造类似three.js的简单3d框架，属于个人周末空闲时间创造的玩具，顺便练练手
 
 
-## 创建一个地球、一个木块 [Demo链接](https://hhzzcc.github.io/web3D/views/public/index.html)
+#### 创建一个地球、一个木块且具有环境光、平行光和点光源 [Demo链接](https://hhzzcc.github.io/web3D/views/public/index.html)
 
 ```javascript
 // javascript index.js
@@ -74,8 +74,11 @@ const start = async () => {
 
     // 帧循环动画
     const animated = () => {
+        // 对物体旋转
         boxMesh.rotate({ x: 1, y: 1, z: 0, delta: 0.01 });
         earthMesh.rotate({ x: 0, y: 1, z: 0, delta: 0.01 });
+
+        // 绘制场景中所有内容
         web3D.draw();
         requestAnimationFrame(animated);
     };
