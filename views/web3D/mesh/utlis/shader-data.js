@@ -45,7 +45,6 @@ export const getAttributes = (gl, mesh) => {
         },
         texture: image ? {
             texture: gl.createTexture(),
-            image,
             data: texture,
             type: 'FLOAT',
             n: 2,

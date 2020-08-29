@@ -2,6 +2,7 @@ import { initShader } from './shader/index.js';
 import { initProgram } from './program.js';
 import { Camera } from './camera/index.js';
 import { Mesh } from './mesh/index.js';
+import { LightAmbient, LightDirectional, LightPoint } from './light/index.js';
 
 export class Web3D {
     constructor() {
@@ -15,6 +16,9 @@ export class Web3D {
         this.program = program;
         this.meshs = [];
         this.camera = null;
+        this.ambientLight = null;
+        this.directionalLight = null;
+        this.pointLight = null;
 
         appendDom.appendChild(this.canvas);
     }
@@ -42,6 +46,15 @@ export class Web3D {
         if (obj instanceof Camera) {
             this.camera = obj;
         }
+        if (obj instanceof LightAmbient) {
+            this.ambientLight = obj;
+        }
+        if (obj instanceof LightDirectional) {
+            this.directionalLight = obj;
+        }
+        if (obj instanceof LightPoint) {
+            this.pointLight = obj;
+        }
     }
 
     updateCamera() {
@@ -53,9 +66,35 @@ export class Web3D {
 
             // 相机位置
             const cameraPositionLocation = this.gl.getUniformLocation(this.program, 'cameraPosition');
-            const { x, y, z } = this.camera.getPosition();
-            const cameraPosition = new Float32Array([x, y, z]);
+            const position = this.camera.getPosition();
+            const cameraPosition = new Float32Array(position);
             this.gl.uniform3fv(cameraPositionLocation, cameraPosition);
+        }
+    }
+
+    updateLight() {
+        if (this.ambientLight) {
+            const color = this.ambientLight.getColor();
+            const colorLocation = this.gl.getUniformLocation(this.program, 'ambientLightColor');
+            this.gl.uniform3fv(colorLocation, new Float32Array(color));
+        }
+
+        if (this.directionalLight) {
+            const color = this.directionalLight.getColor();
+            const colorLocation = this.gl.getUniformLocation(this.program, 'directionalLightColor');
+            this.gl.uniform3fv(colorLocation, new Float32Array(color));
+            const position = this.directionalLight.getPosition();
+            const positionLocation = this.gl.getUniformLocation(this.program, 'directionalLightPosition');
+            this.gl.uniform3fv(positionLocation, new Float32Array(position));
+        }
+
+        if (this.pointLight) {
+            const color = this.pointLight.getColor();
+            const colorLocation = this.gl.getUniformLocation(this.program, 'pointLightColor');
+            this.gl.uniform3fv(colorLocation, new Float32Array(color));
+            const position = this.pointLight.getPosition();
+            const positionLocation = this.gl.getUniformLocation(this.program, 'pointLightPosition');
+            this.gl.uniform3fv(positionLocation, new Float32Array(position));
         }
     }
 
@@ -78,7 +117,8 @@ export class Web3D {
                     this.gl.vertexAttribPointer(location, value.n, this.gl[value.type], false, 0, 0);
                     this.gl.enableVertexAttribArray(location);
                     if (key === 'texture') {
-                        const { texture, image } = value;
+                        const { texture } = value;
+                        const image = mesh.material.getImage();
                         const uSamplerLoaction = this.gl.getUniformLocation(this.program, 'uSampler');
                         this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
                         this.gl.activeTexture(this.gl.TEXTURE0);
@@ -114,6 +154,7 @@ export class Web3D {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 
         this.updateCamera();
+        this.updateLight();
         this.drawMeshs();
     }
 };

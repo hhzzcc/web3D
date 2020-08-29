@@ -10,9 +10,10 @@ export class Mesh {
         this.geometry = geometry;
         this.material = material;
 
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
+        // this.x = 0;
+        // this.y = 0;
+        // this.z = 0;
+        this.position = [0, 0, 0];
         this.rotateX = 0;
         this.rotateY = 0;
         this.rotateZ = 0;
@@ -67,7 +68,7 @@ export class Mesh {
 
     // 计算并更新平移后的矩阵
     computedTranslateMatrix() {
-        translate(this.meshMatrix, this.meshMatrix, [this.x, this.y, this.z]);
+        translate(this.meshMatrix, this.meshMatrix, this.position);
     }
 
     // 计算并更新旋转后的矩阵
@@ -82,10 +83,12 @@ export class Mesh {
         this.computedNormalMatrix();
     }
 
-    translate({ x, y, z }) {
-        this.x = x || this.x;
-        this.y = y || this.y;
-        this.z = z || this.z;
+    setPosition({ x, y, z }) {
+        this.position = [
+            x || this.position[0],
+            y || this.position[1],
+            z || this.position[2]
+        ]
         this.computedTranslateMatrix();
     }
 
@@ -99,10 +102,6 @@ export class Mesh {
     }
 
     getPosition() {
-        return {
-            x: this.x,
-            y: this.y,
-            z: this.z
-        };
+        return this.position;
     }
 };

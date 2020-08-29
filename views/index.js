@@ -3,6 +3,7 @@ import { CameraPerspective } from './web3D/camera/index.js';
 import { GeometryCube, GeometrySphare } from './web3D/geometry/index.js';
 import { MaterialBase } from './web3D/material/index.js';
 import { Mesh } from './web3D/mesh/index.js';
+import { LightAmbient, LightDirectional, LightPoint } from './web3D/light/index.js';
 
 const loadImage = src => {
     return new Promise(resolve => {
@@ -20,38 +21,96 @@ const start = async () => {
     const web3D = new Web3D();
     await web3D.init();
 
+    // 透视投影相机
     const camera = new CameraPerspective({ fov: Math.PI / 6, aspect: window.innerWidth / window.innerHeight });
 
-    const geometry = new GeometryCube({ l: 1, w: 1, h: 1 });
-    // const geometry = new GeometrySphare();
-    const image = await loadImage('../assets/imgs/bg.jpeg');
-    const image1 = await loadImage('../assets/imgs/earth.jpeg');
 
-    const material = new MaterialBase({ image });
-    const mesh = new Mesh(geometry, material);
+    // 地球
+    const earthImage = await loadImage('../assets/imgs/earth.jpeg');
+    const earthMesh = new Mesh(
+        new GeometrySphare(),
+        new MaterialBase({ image: earthImage })
+    );
 
-    const geometry1 = new GeometrySphare();
-    const material1 = new MaterialBase({ image: image1 });
-    const mesh1 = new Mesh(geometry1, material1);
+    // 箱子
+    const boxImage = await loadImage('../assets/imgs/bg.jpeg');
+    const boxMesh = new Mesh(
+        new GeometryCube({ l: 1, w: 1, h: 1 }),
+        new MaterialBase({ image: boxImage })
+    );
+
+    // 环境光
+    const lightAmbient = new LightAmbient({ color: [1, 1, 1], strength: 0.3 });
+
+    // 平行光
+    const lightDirectional = new LightDirectional({ position: [-5, 0, 2], strength: 0.5 });
+
+    // 点光源
+    const lightPoint = new LightPoint({ position: [0, 0, 2], strength: 0.5 });
+
 
     web3D.add(camera);
-    web3D.add(mesh1);
-    web3D.add(mesh);
+    web3D.add(earthMesh);
+    web3D.add(boxMesh);
+    web3D.add(lightAmbient);
+    web3D.add(lightDirectional);
+    web3D.add(lightPoint);
 
-    camera.translate({ x: 0, y: 0, z: 10 });
-
-    mesh.translate({ x: 0, y: -1, z: 2 });
-
-    mesh1.translate({ x: 0, y: 1, z: 2 });
+    camera.setPosition({ x: 0, y: 0, z: 10 });
+    earthMesh.setPosition({ x: 0, y: 1, z: 2 });
+    boxMesh.setPosition({ x: 0, y: -1, z: 0 });
 
     const animated = () => {
-        mesh.rotate({ x: 1, y: 1, z: 0, delta: 0.01 });
-        mesh1.rotate({ x: 0, y: 1, z: 0, delta: 0.01 });
+        boxMesh.rotate({ x: 1, y: 1, z: 0, delta: 0.01 });
+        earthMesh.rotate({ x: 0, y: 1, z: 0, delta: 0.01 });
         web3D.draw();
         requestAnimationFrame(animated);
     };
 
+    // 设置控制变量
+    const setWeb3D = () => {
+        
+        const $sphareTexture = document.getElementById('sphare-texture');
+        $sphareTexture.addEventListener('change', async () => {
+            const image = await loadImage($sphareTexture.value);
+            earthMesh.material.setImage(image);
+        });
+
+        const $cubeTexture = document.getElementById('cube-texture');
+        $cubeTexture.addEventListener('change', async () => {
+            const image = await loadImage($cubeTexture.value);
+            boxMesh.material.setImage(image);
+        });
+
+        const $ambientLightStrength = document.getElementById('ambient-light-strength');
+        $ambientLightStrength.addEventListener('input', () => {
+            lightAmbient.setStrength($ambientLightStrength.value);
+        });
+
+        const $directionalLightStrength = document.getElementById('directional-light-strength');
+        $directionalLightStrength.addEventListener('input', () => {
+            lightDirectional.setStrength($directionalLightStrength.value);
+        });
+
+        const $directionalLightPositionX = document.getElementById('directional-light-position-x');
+        $directionalLightPositionX.addEventListener('input', () => {
+            lightDirectional.setPosition({ x: $directionalLightPositionX.value });
+        });
+
+        const $pointLightStrength = document.getElementById('point-light-strength');
+        $pointLightStrength.addEventListener('input', () => {
+            lightPoint.setStrength($pointLightStrength.value);
+        });
+
+        const $pointLightPositionX = document.getElementById('point-light-position-x');
+        $pointLightPositionX.addEventListener('input', () => {
+            lightPoint.setPosition({ x: $pointLightPositionX.value });
+        });
+    };
+
     animated();
+
+    setWeb3D();
 };
 
 start();

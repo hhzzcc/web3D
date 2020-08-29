@@ -3,16 +3,16 @@ import { create, translate, rotate } from '../utils/math.js';
 export class Camera {
     constructor() {
         this.matrix = create();
-        this.x = 0;
-        this.y = 0;
-        this.z = 0;
+        this.position = [0, 0, 0];
     }
 
-    translate({ x = 0, y = 0, z = 0 }) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        translate(this.matrix, this.matrix, [-x, -y, -z]);
+    setPosition({ x, y, z }) {
+        this.position = [
+            x || this.position[0],
+            y || this.position[1],
+            z || this.position[2]
+        ]
+        translate(this.matrix, this.matrix, this.position.map(p => -1 * p));
     }
 
     rotate(delta, x, y, z) {
@@ -20,27 +20,8 @@ export class Camera {
     }
 
     getPosition() {
-        return {
-            x: this.x,
-            y: this.y,
-            z: this.z
-        };
+        return this.position;
     }
-
-    // translate({ x, y, z }) {
-    //     this.x = x || this.x;
-    //     this.y = y || this.y;
-    //     this.z = z || this.z;
-    //     this.computedMatrix();
-    // }
-
-    // rotate({ x, y, z, delta }) {
-    //     this.rotateX = x || this.rotateX;
-    //     this.rotateY = y || this.rotateY;
-    //     this.rotateZ = z || this.rotateZ;
-    //     this.delta = delta || this.delta;
-    //     this.computedMatrix();
-    // }
 
     getCameraMatrix() {
         return this.matrix;
