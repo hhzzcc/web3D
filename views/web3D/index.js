@@ -3,6 +3,7 @@ import { initProgram } from './program.js';
 import { Camera } from './camera/index.js';
 import { Mesh } from './mesh/index.js';
 import { LightAmbient, LightDirectional, LightPoint } from './light/index.js';
+import { MaterialPhone } from './material/index.js';
 
 export class Web3D {
     constructor() {
@@ -78,6 +79,10 @@ export class Web3D {
             const colorLocation = this.gl.getUniformLocation(this.program, 'ambientLightColor');
             this.gl.uniform3fv(colorLocation, new Float32Array(color));
         }
+        this.gl.uniform1i(
+            this.gl.getUniformLocation(this.program, 'useAmbientLight'),
+            this.ambientLight ? 1 : 0
+        );
 
         if (this.directionalLight) {
             const color = this.directionalLight.getColor();
@@ -87,6 +92,10 @@ export class Web3D {
             const positionLocation = this.gl.getUniformLocation(this.program, 'directionalLightPosition');
             this.gl.uniform3fv(positionLocation, new Float32Array(position));
         }
+        this.gl.uniform1i(
+            this.gl.getUniformLocation(this.program, 'useDirectionalLight'),
+            this.directionalLight ? 1 : 0
+        );
 
         if (this.pointLight) {
             const color = this.pointLight.getColor();
@@ -96,12 +105,17 @@ export class Web3D {
             const positionLocation = this.gl.getUniformLocation(this.program, 'pointLightPosition');
             this.gl.uniform3fv(positionLocation, new Float32Array(position));
         }
+        this.gl.uniform1i(
+            this.gl.getUniformLocation(this.program, 'usePointLight'),
+            this.pointLight ? 1 : 0
+        );
     }
 
     drawMeshs() {
         for (let i = 0; i < this.meshs.length; i++) {
             const mesh = this.meshs[i];
             const attributes = mesh.getAttributes();
+            const material = mesh.getMaterial();
 
             // 顶点数据
             for (const key in attributes) {
@@ -142,6 +156,9 @@ export class Web3D {
             const normalMatrixLocation = this.gl.getUniformLocation(this.program, 'normalMatrix');
             const normalMatrix = mesh.getNormalMatrix();
             this.gl.uniformMatrix4fv(normalMatrixLocation, false, normalMatrix);
+
+            const usePhoneMaterialLocation = this.gl.getUniformLocation(this.program, 'usePhoneMaterial');
+            this.gl.uniform1i(usePhoneMaterialLocation, material instanceof MaterialPhone ? 1 : 0);
 
             this.gl.drawElements(this.gl.TRIANGLES, attributes.index.data.length, this.gl.UNSIGNED_SHORT, 0);
         }

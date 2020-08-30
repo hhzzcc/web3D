@@ -1,7 +1,7 @@
 import { Web3D } from './web3D/index.js';
 import { CameraPerspective } from './web3D/camera/index.js';
 import { GeometryCube, GeometrySphare } from './web3D/geometry/index.js';
-import { MaterialBase } from './web3D/material/index.js';
+import { MaterialBase, MaterialPhone } from './web3D/material/index.js';
 import { Mesh } from './web3D/mesh/index.js';
 import { LightAmbient, LightDirectional, LightPoint } from './web3D/light/index.js';
 
@@ -36,7 +36,7 @@ const start = async () => {
     const boxImage = await loadImage('../assets/imgs/bg.jpeg');
     const boxMesh = new Mesh(
         new GeometryCube({ l: 1, w: 1, h: 1 }),
-        new MaterialBase({ image: boxImage })
+        new MaterialPhone({ image: boxImage })
     );
 
     // 环境光
