@@ -12,11 +12,8 @@ export const getAttributes = (gl, mesh) => {
     const image = material.getImage();
     const color = new Float32Array(material.getColor());
 
-    let parseColor = null;
-    if (typeof color === 'function') {
-        parseColor = color();
-    }
-    else {
+    let parseColor = color;
+    if (color && color.length === 3) {
         parseColor = position.map((_, i) => color[i % 3]);
     }
 

@@ -1,9 +1,9 @@
-import { Web3D } from './web3D/index.js';
-import { CameraPerspective } from './web3D/camera/index.js';
-import { GeometryCube, GeometrySphare } from './web3D/geometry/index.js';
-import { MaterialBase, MaterialPhone } from './web3D/material/index.js';
-import { Mesh } from './web3D/mesh/index.js';
-import { LightAmbient, LightDirectional, LightPoint } from './web3D/light/index.js';
+import { Web3D } from '../../web3D/index.js';
+import { CameraPerspective } from '../../web3D/camera/index.js';
+import { GeometryCube, GeometrySphare } from '../../web3D/geometry/index.js';
+import { MaterialBase, MaterialPhone } from '../../web3D/material/index.js';
+import { Mesh } from '../../web3D/mesh/index.js';
+import { LightAmbient, LightDirectional, LightPoint } from '../../web3D/light/index.js';
 
 const loadImage = src => {
     return new Promise(resolve => {
@@ -26,14 +26,14 @@ const start = async () => {
 
 
     // 地球
-    const earthImage = await loadImage('../assets/imgs/earth.jpeg');
+    const earthImage = await loadImage('./imgs/earth.jpeg');
     const earthMesh = new Mesh(
         new GeometrySphare(),
         new MaterialBase({ image: earthImage })
     );
 
     // 箱子
-    const boxImage = await loadImage('../assets/imgs/bg.jpeg');
+    const boxImage = await loadImage('./imgs/box.jpeg');
     const boxMesh = new Mesh(
         new GeometryCube({ l: 1, w: 1, h: 1 }),
         new MaterialPhone({ image: boxImage })
@@ -57,11 +57,17 @@ const start = async () => {
     web3D.add(lightPoint);
 
     camera.setPosition({ x: 0, y: 0, z: 10 });
-    earthMesh.setPosition({ x: 0, y: 1, z: 2 });
+    earthMesh.setPosition({ x: 0, y: 1, z: 0 });
     boxMesh.setPosition({ x: 0, y: -1, z: 0 });
 
+
     const animated = () => {
-        boxMesh.rotate({ x: 1, y: 1, z: 0, delta: 0.01 });
+        // camera.setPosition({ x: 0, y: 0, z: 0.01 });
+
+        earthMesh.setPosition({ x: 0.001, y: 0.001, z: 0.001 });
+        // earthMesh.setPosition({ x: 0, y: 0.01, z: 0 });
+        // boxMesh.rotate({ x: 1, y: 1, z: 0, delta: 0.01 });
+        boxMesh.rotate({ x: 1, y: 0, z: 0, delta: 0.01 });
         earthMesh.rotate({ x: 0, y: 1, z: 0, delta: 0.01 });
         web3D.draw();
         requestAnimationFrame(animated);

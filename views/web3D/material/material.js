@@ -6,6 +6,10 @@ export class Material {
     }
 
     setColor(color) {
+        if (typeof color === 'function') {
+            this.color = color();
+            return;
+        }
         this.color = color;
     }
 

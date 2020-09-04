@@ -20,7 +20,7 @@ uniform vec3 pointLightPosition;
 
 uniform int usePhoneMaterial;
 
-
+uniform int useTexture;
 uniform sampler2D uSampler;
 
 
@@ -55,8 +55,15 @@ void main() {
     	vec3 sColor = pointLightColor * cDotr;
         lightColor += sColor;
     }
+
+    vec4 fragColor = vec4(lightColor * vColor, 1.0);
+
+    // 纹理
+    if (useTexture == 1) {
+        fragColor *= texture2D(uSampler, vTexture);
+    }
     
 
-    gl_FragColor = vec4(lightColor * vColor, 1.0) * texture2D(uSampler, vTexture);
+    gl_FragColor = fragColor;
 
 }

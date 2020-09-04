@@ -39,22 +39,30 @@ export class Web3D {
         };
     }
 
-    add(obj) {
-        if(obj instanceof Mesh) {
-            obj.setAttributes(this.gl);
-            this.meshs.push(obj);
-        }
-        if (obj instanceof Camera) {
-            this.camera = obj;
-        }
-        if (obj instanceof LightAmbient) {
-            this.ambientLight = obj;
-        }
-        if (obj instanceof LightDirectional) {
-            this.directionalLight = obj;
-        }
-        if (obj instanceof LightPoint) {
-            this.pointLight = obj;
+    add(objs) {
+        const add = obj => {
+            if(obj instanceof Mesh) {
+                obj.setAttributes(this.gl);
+                this.meshs.push(obj);
+            }
+            if (obj instanceof Camera) {
+                this.camera = obj;
+            }
+            if (obj instanceof LightAmbient) {
+                this.ambientLight = obj;
+            }
+            if (obj instanceof LightDirectional) {
+                this.directionalLight = obj;
+            }
+            if (obj instanceof LightPoint) {
+                this.pointLight = obj;
+            }
+        };
+
+        if (objs instanceof Array) {
+            objs.forEach(obj => add(obj));
+        } else {
+            add(objs);
         }
     }
 
@@ -144,6 +152,10 @@ export class Web3D {
                         this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, this.gl.RGB, this.gl.UNSIGNED_BYTE, image);
                         this.gl.uniform1i(uSamplerLoaction, 0);
                     }
+                    this.gl.uniform1i(
+                        this.gl.getUniformLocation(this.program, 'useTexture'),
+                        key === 'texture' ? 1 : 0
+                    );
                 }
             }
 

@@ -1,5 +1,5 @@
 import { getAttributes, getUniforms, getOther } from './utlis/shader-data.js';
-import { create, translate, rotate, invert, transpose } from '../utils/math.js';
+import { create, translate, rotate, invert, transpose, multiply } from '../utils/math.js';
 
 export class Mesh {
     constructor(geometry, material) {
@@ -10,9 +10,6 @@ export class Mesh {
         this.geometry = geometry;
         this.material = material;
 
-        // this.x = 0;
-        // this.y = 0;
-        // this.z = 0;
         this.position = [0, 0, 0];
         this.rotateX = 0;
         this.rotateY = 0;
@@ -20,11 +17,11 @@ export class Mesh {
         this.delta = 0;
 
         this.meshMatrix = create();
+        this.translateMatrix = create();
+        this.rotateMatrix = create();
         this.normalMatrix = create();
 
         this.attributes = null;
-
-        this.computedAllMatrix();
     }
 
     // 设置顶点数据对应shader attribute类型数据，需要传入gl，生成相应buffer
@@ -68,19 +65,14 @@ export class Mesh {
 
     // 计算并更新平移后的矩阵
     computedTranslateMatrix() {
-        translate(this.meshMatrix, this.meshMatrix, this.position);
+        translate(this.translateMatrix, this.translateMatrix, this.position);
+        multiply(this.meshMatrix, this.translateMatrix, this.rotateMatrix);
     }
 
     // 计算并更新旋转后的矩阵
     computedRotateMatrix() {
-        rotate(this.meshMatrix, this.meshMatrix, this.delta, [this.rotateX, this.rotateY, this.rotateZ]);
-    }
-
-    // 计算并更新全部矩阵
-    computedAllMatrix() {
-        this.computedTranslateMatrix();
-        this.computedRotateMatrix();
-        this.computedNormalMatrix();
+        rotate(this.rotateMatrix, this.rotateMatrix, this.delta, [this.rotateX, this.rotateY, this.rotateZ]);
+        multiply(this.meshMatrix, this.translateMatrix, this.rotateMatrix);
     }
 
     setPosition({ x, y, z }) {
