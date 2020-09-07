@@ -6,6 +6,8 @@ import { Mesh } from '../../web3D/mesh/index.js';
 import { LightAmbient, LightDirectional, LightPoint } from '../../web3D/light/index.js';
 
 import { Pointer } from './js/pointer/index.js';
+import { Keyword } from './js/keyword/index.js';
+
 
 const loadImage = src => {
     return new Promise(resolve => {
@@ -69,7 +71,7 @@ const start = async () => {
         lightPoint
     ]);
 
-    camera.setPosition({ x: 0, y: -4, z: 10 });
+    // camera.setPosition({ x: 0, y: -4, z: 10 });
     earthMesh.setPosition({ x: 0, y: 0, z: 0 });
     faceBackMesh.setPosition({ x: 0, y: 0, z: -5 });
     
@@ -80,7 +82,9 @@ const start = async () => {
     faceLeftMesh.setPosition({ x: -5, y: 0, z: 0 });
     
     const pointer = new Pointer();
+    const keyword = new Keyword();
     pointer.start(camera);
+    keyword.start(camera);
 
 
     const animated = () => {
