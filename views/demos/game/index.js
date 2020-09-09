@@ -71,7 +71,7 @@ const start = async () => {
         lightPoint
     ]);
 
-    // camera.setPosition({ x: 0, y: -4, z: 10 });
+    camera.move({ x: 0, y: 0, z: 10 });
     earthMesh.setPosition({ x: 0, y: 0, z: 0 });
     faceBackMesh.setPosition({ x: 0, y: 0, z: -5 });
     

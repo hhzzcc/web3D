@@ -2,12 +2,12 @@ import { create, translate, rotate, multiply, lookAt } from '../utils/math.js';
 
 export class Camera {
     constructor() {
-        this.position = [0, -4, 10];
+        this.position = [0, 0, 0];
         this.rx = 0;
         this.ry = 0;
         this.rz = 0;
 
-        this.view = [0, 0, 0];
+        this.view = [0, 0, 10];
 
 
         this.matrix = create();
@@ -20,13 +20,10 @@ export class Camera {
 
     move({ x, y, z }) {
         this.position = [
-            this.position[0] + x || this.position[0],
-            this.position[1] + y || this.position[1],
-            this.position[2] + z || this.position[2]
+            this.position[0] + x,
+            this.position[1] + y,
+            this.position[2] + z
         ];
-    }
-
-    lookAt(x, y, z) {
         this.view = [
             this.view[0] + x,
             this.view[1] + y,
@@ -34,32 +31,40 @@ export class Camera {
         ];
     }
 
-    setPosition({ x, y, z }) {
-        this.position = [
-            x || this.position[0],
-            y || this.position[1],
-            z || this.position[2]
-        ]
-        translate(this.translateMatrix, this.translateMatrix, this.position.map(p => -1 * p));
+    lookAt(x, y, z) {
+        this.view = [x, y, z];
     }
 
-    setRotate(delta, x, y, z) {
-        if (x > 0) this.rx = delta;
-        if (y > 0) this.ry = delta;
-        if (z > 0) this.rz = delta;
-        rotate(this.rotateMatrix, create(), delta, [x, y, z]);
+    // setPosition({ x, y, z }) {
+    //     this.position = [
+    //         x || this.position[0],
+    //         y || this.position[1],
+    //         z || this.position[2]
+    //     ]
+    //     translate(this.translateMatrix, this.translateMatrix, this.position.map(p => -1 * p));
+    // }
+
+    // setRotate(delta, x, y, z) {
+    //     if (x > 0) this.rx = delta;
+    //     if (y > 0) this.ry = delta;
+    //     if (z > 0) this.rz = delta;
+    //     rotate(this.rotateMatrix, create(), delta, [x, y, z]);
         
-    }
+    // }
 
-    rotate(delta, x, y, z) {
-        if (x > 0) this.rx += delta;
-        if (y > 0) this.ry += delta;
-        if (z > 0) this.rz += delta;
-        rotate(this.rotateMatrix, this.rotateMatrix, delta, [x, y, z]);
-    }
+    // rotate(delta, x, y, z) {
+    //     if (x > 0) this.rx += delta;
+    //     if (y > 0) this.ry += delta;
+    //     if (z > 0) this.rz += delta;
+    //     rotate(this.rotateMatrix, this.rotateMatrix, delta, [x, y, z]);
+    // }
 
     getPosition() {
         return this.position;
+    }
+
+    getView() {
+        return this.view;
     }
 
     getCameraMatrix() {
