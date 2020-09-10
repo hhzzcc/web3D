@@ -23,7 +23,6 @@ uniform int usePhoneMaterial;
 uniform int useTexture;
 uniform sampler2D uSampler;
 
-
 void main() {
     vec3 lightColor = vec3(0, 0, 0);
 

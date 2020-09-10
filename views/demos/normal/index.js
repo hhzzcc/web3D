@@ -62,8 +62,8 @@ const start = async () => {
 
     camera.move({ x: 0, y: 0, z: 10 });
     camera.lookAt(0, 0, 0);
-    earthMesh.setPosition({ x: 0, y: 1, z: 0 });
-    boxMesh.setPosition({ x: 0, y: -1, z: 0 });
+    earthMesh.move({ x: 0, y: 1, z: 0 });
+    boxMesh.move({ x: 0, y: -1, z: 0 });
 
 
     const animated = () => {
@@ -100,7 +100,7 @@ const start = async () => {
 
         const $directionalLightPositionX = document.getElementById('directional-light-position-x');
         $directionalLightPositionX.addEventListener('input', () => {
-            lightDirectional.setPosition({ x: $directionalLightPositionX.value });
+            lightDirectional.move({ x: $directionalLightPositionX.value });
         });
 
         const $pointLightStrength = document.getElementById('point-light-strength');
@@ -110,7 +110,7 @@ const start = async () => {
 
         const $pointLightPositionX = document.getElementById('point-light-position-x');
         $pointLightPositionX.addEventListener('input', () => {
-            lightPoint.setPosition({ x: $pointLightPositionX.value });
+            lightPoint.move({ x: $pointLightPositionX.value });
         });
     };
 

@@ -144,21 +144,21 @@ export class Web3D {
                     if (key === 'texture') {
                         const { texture } = value;
                         const image = mesh.material.getImage();
-                        const uSamplerLoaction = this.gl.getUniformLocation(this.program, 'uSampler');
-                        this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
-                        this.gl.activeTexture(this.gl.TEXTURE0);
-                        this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-                        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-                        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
-                        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-                        this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-                        this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, this.gl.RGB, this.gl.UNSIGNED_BYTE, image);
-                        this.gl.uniform1i(uSamplerLoaction, 0);
+                        if (image) {
+                            const uSamplerLoaction = this.gl.getUniformLocation(this.program, 'uSampler');
+                            this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
+                            this.gl.activeTexture(this.gl.TEXTURE0);
+                            this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+                            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+                            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+                            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+                            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+                            this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, this.gl.RGB, this.gl.UNSIGNED_BYTE, image);
+                            this.gl.uniform1i(uSamplerLoaction, 0);
+                        }
+                        // 是否开启纹理
+                        this.gl.uniform1i(this.gl.getUniformLocation(this.program, 'useTexture'), image ? 1 : 0);
                     }
-                    this.gl.uniform1i(
-                        this.gl.getUniformLocation(this.program, 'useTexture'),
-                        key === 'texture' ? 1 : 0
-                    );
                 }
             }
 

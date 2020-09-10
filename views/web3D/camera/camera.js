@@ -12,8 +12,8 @@ export class Camera {
 
         this.matrix = create();
         this.cameraMatrix = create();
-        this.translateMatrix = create();
-        this.rotateMatrix = create();
+        // this.translateMatrix = create();
+        // this.rotateMatrix = create();
         this.viewMatrix = lookAt([], this.position,  this.view, [0, 1, 0]);
         
     }
@@ -34,15 +34,6 @@ export class Camera {
     lookAt(x, y, z) {
         this.view = [x, y, z];
     }
-
-    // setPosition({ x, y, z }) {
-    //     this.position = [
-    //         x || this.position[0],
-    //         y || this.position[1],
-    //         z || this.position[2]
-    //     ]
-    //     translate(this.translateMatrix, this.translateMatrix, this.position.map(p => -1 * p));
-    // }
 
     // setRotate(delta, x, y, z) {
     //     if (x > 0) this.rx = delta;
@@ -69,9 +60,6 @@ export class Camera {
 
     getCameraMatrix() {
         this.viewMatrix = lookAt([], this.position, this.view, [0, 1, 0]);
-        const m = multiply([], this.rotateMatrix, this.translateMatrix);
-        const mv = multiply([], m, this.viewMatrix);
-        const mvp = multiply([], this.cameraMatrix, mv);
-        return mvp;
+        return multiply([], this.cameraMatrix, this.viewMatrix);
     }
 }

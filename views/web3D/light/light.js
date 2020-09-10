@@ -5,7 +5,7 @@ export class Light {
         this.strength = 1;
     }
 
-    setPosition({ x, y, z }) {
+    move({ x, y, z }) {
         this.position = [
             x || this.position[0],
             y || this.position[1],

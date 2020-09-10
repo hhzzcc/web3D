@@ -18,6 +18,13 @@
             padding: 10px;
         }
 
+        .title {
+            font-size: 45px;
+            font-weight: bolder;
+            text-shadow: 5px 7px 7px #999;
+            margin-bottom: 10px;
+        }
+
         .nav {
             padding: 10px 0;
             cursor: pointer;
@@ -40,15 +47,21 @@
     </style>
 </head>
 <body>
-    <div class="navs"></div>
+    <div class="navs">
+        <div class="title">web3D</div>
+    </div>
     <iframe></iframe>
     <script>
         
 
         const createNavs = () => {
             const navs = [
+                { title: '基础正方体', to: './cube/index.html' },
+                { title: '基础光照', to: './light/index.html' },
+                { title: '纹理', to: './texture/index.html' },
+                { title: '动画(旋转和平移)', to: './animated/index.html' },
                 { title: '地球和木箱', to: './normal/index.html' },
-                { title: '第一人称视角(鼠标点击屏幕)', to: './game/index.html' },
+                { title: '第一人称(鼠标点击屏幕)', to: './game/index.html' },
             ];
             const $navs = document.querySelector('.navs');
             const $iframe = document.querySelector('iframe');

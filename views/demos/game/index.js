@@ -80,14 +80,14 @@ const start = async () => {
 
     camera.move({ x: 0, y: 0, z: 10 });
     camera.lookAt(0, 0, 0);
-    earthMesh.setPosition({ x: 0, y: 0, z: 0 });
-    faceBackMesh.setPosition({ x: 0, y: 0, z: -5 });
+    earthMesh.move({ x: 0, y: 0, z: 0 });
+    faceBackMesh.move({ x: 0, y: 0, z: -5 });
     
     faceBottomMesh.rotate({ x: 1, y: 0, z: 0, delta: -Math.PI / 2 });
-    faceBottomMesh.setPosition({ x: 0, y: -5, z: 0 });
+    faceBottomMesh.move({ x: 0, y: -5, z: 0 });
 
     faceLeftMesh.rotate({ x: 0, y: 1, z: 0, delta: -Math.PI / 2 });
-    faceLeftMesh.setPosition({ x: -5, y: 0, z: 0 });
+    faceLeftMesh.move({ x: -5, y: 0, z: 0 });
     
     const pointer = new Pointer();
     const keyword = new Keyword();

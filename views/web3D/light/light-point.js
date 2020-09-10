@@ -7,7 +7,7 @@ export class LightPoint extends Light {
             strength = 1
         } = options;
         super();
-        this.setPosition({
+        this.move({
             x: position[0],
             y: position[1],
             z: position[2]

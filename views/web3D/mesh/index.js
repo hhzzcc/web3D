@@ -75,7 +75,7 @@ export class Mesh {
         multiply(this.meshMatrix, this.translateMatrix, this.rotateMatrix);
     }
 
-    setPosition({ x, y, z }) {
+    move({ x, y, z }) {
         this.position = [
             x || this.position[0],
             y || this.position[1],
