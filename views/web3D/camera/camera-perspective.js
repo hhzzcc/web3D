@@ -11,6 +11,6 @@ export class CameraPerspective extends Camera {
             console.error('need aspect');
         }
         const { fov, aspect } = options;
-        perspective(this.cameraMatrix, fov, aspect, 0.1, 1000.0);
+        perspective(this.cameraMatrix, fov, aspect, 0.1, 10000.0);
     }
 };

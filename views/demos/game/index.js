@@ -35,19 +35,22 @@ const start = async () => {
         new MaterialBase({ image: earthImage })
     );
 
+    const skyBack = await loadImage('./imgs/sky/back.jpg');
     const faceBackMesh = new Mesh(
         new GeometryFace({ l: 10, w: 10 }),
-        new MaterialPhone()
+        new MaterialPhone({ image: skyBack })
     );
 
+    const skyBottom = await loadImage('./imgs/sky/down.jpg');
     const faceBottomMesh = new Mesh(
         new GeometryFace({ l: 10, w: 10 }),
-        new MaterialPhone()
+        new MaterialPhone({ image: skyBottom })
     );
 
+    const skyLeft = await loadImage('./imgs/sky/left.jpg');
     const faceLeftMesh = new Mesh(
         new GeometryFace({ l: 10, w: 10 }),
-        new MaterialPhone()
+        new MaterialPhone({ image: skyLeft })
     );
 
     // 环境光
