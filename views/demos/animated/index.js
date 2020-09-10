@@ -1,7 +1,7 @@
 import { Web3D } from '../../web3D/index.js';
 import { CameraPerspective } from '../../web3D/camera/index.js';
 import { GeometryCube } from '../../web3D/geometry/index.js';
-import { MaterialBase } from '../../web3D/material/index.js';
+import { MaterialPhone } from '../../web3D/material/index.js';
 import { Mesh } from '../../web3D/mesh/index.js';
 import { LightAmbient, LightDirectional, LightPoint } from '../../web3D/light/index.js';
 
@@ -31,7 +31,7 @@ const start = async () => {
     const boxImage = await loadImage('./imgs/box.jpeg');
     const boxMesh = new Mesh(
         new GeometryCube({ l: 1, w: 1, h: 1 }),
-        new MaterialBase({ image: boxImage })
+        new MaterialPhone({ image: boxImage })
     );
 
     // 环境光
@@ -41,7 +41,7 @@ const start = async () => {
     const lightDirectional = new LightDirectional({ position: [-5, 0, 2], strength: 0.5 });
 
     // 点光源
-    const lightPoint = new LightPoint({ position: [0, 0, 2], strength: 0.5 });
+    const lightPoint = new LightPoint({ position: [-1, -1, 2], strength: 1.0 });
 
 
     web3D.add([
@@ -56,11 +56,11 @@ const start = async () => {
     camera.move({ x: 5, y: 5, z: 10 });
     camera.lookAt(0, 0, 0);
 
-    let s = 0.01;
+    let s = -1;
     const animated = () => {
         boxMesh.rotate({ x: 1, y: 0, z: 0, delta: 0.01 });
-        boxMesh.move({ x: Math.sin(s) / 10, y: 0, z: 0 });
-        s += 0.1;
+        boxMesh.move({ x: -Math.sin(s) / 100, y: 0, z: 0 });
+        s += 0.01;
         web3D.draw();
         requestAnimationFrame(animated);
     };

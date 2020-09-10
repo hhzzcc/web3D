@@ -1,9 +1,10 @@
 import { Web3D } from '../../web3D/index.js';
 import { CameraPerspective } from '../../web3D/camera/index.js';
-import { GeometryCube } from '../../web3D/geometry/index.js';
-import { MaterialBase } from '../../web3D/material/index.js';
+// import { GeometryCube } from '../../web3D/geometry/index.js';
+import { MaterialPhone } from '../../web3D/material/index.js';
 import { Mesh } from '../../web3D/mesh/index.js';
 import { LightAmbient, LightDirectional, LightPoint } from '../../web3D/light/index.js';
+import { loadObj } from '../../web3D/loader/obj.js';
 
 const start = async () => {
     
@@ -18,9 +19,10 @@ const start = async () => {
     const camera = new CameraPerspective({ fov: Math.PI / 6, aspect: width / height });
 
     // 箱子
+    const geometry = await loadObj('./models/bunny.obj');
     const boxMesh = new Mesh(
-        new GeometryCube({ l: 1, w: 1, h: 1 }),
-        new MaterialBase({ color: [0.5, 0.5, 1] })
+        geometry,
+        new MaterialPhone({ color: [0.5, 0.5, 1] })
     );
 
     // 环境光
@@ -41,10 +43,16 @@ const start = async () => {
         lightPoint
     ])
 
-    camera.move({ x: 5, y: 5, z: 10 });
+    camera.move({ x: 0, y: 5, z: 5 });
     camera.lookAt(0, 0, 0);
 
-    web3D.draw();
+    const animated = () => {
+        boxMesh.rotate({ x: 0, y: 1, z: 0, delta: 0.01 });
+        web3D.draw();
+        requestAnimationFrame(animated);
+    };
+
+    animated();
 
 
 };
