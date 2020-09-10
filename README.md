@@ -3,7 +3,7 @@
 #### 使用原生webgl打造类似three.js的简单3d框架，属于个人周末空闲时间创造的玩具，顺便练练手
 
 
-[demo 地址](https://hhzzcc.github.io/web3D/views/demos/index.html)
+[demo 地址](https://hhzzcc.github.io/web3D/views/demos)
 
 
 
@@ -16,6 +16,6 @@ yarn or npm i
 node server/index.js
 
 # 打开浏览器输入
-localhost:1234/view/demos/normal/index.html
+localhost:1234/view/demos
 
 ```
