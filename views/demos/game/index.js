@@ -22,10 +22,14 @@ const loadImage = src => {
 
 const start = async () => {
     const web3D = new Web3D();
-    await web3D.init();
+    const parentDom = document.querySelector('.web3d');
+    const width = parentDom.offsetWidth;
+    const height = parentDom.offsetHeight;
+    const web3dDom = await web3D.init({ width, height });
+    parentDom.appendChild(web3dDom);
 
     // 透视投影相机
-    const camera = new CameraPerspective({ fov: Math.PI / 6, aspect: window.innerWidth / window.innerHeight });
+    const camera = new CameraPerspective({ fov: Math.PI / 6, aspect: width / height });
 
 
     // 地球
@@ -75,6 +79,7 @@ const start = async () => {
     ]);
 
     camera.move({ x: 0, y: 0, z: 10 });
+    camera.lookAt(0, 0, 0);
     earthMesh.setPosition({ x: 0, y: 0, z: 0 });
     faceBackMesh.setPosition({ x: 0, y: 0, z: -5 });
     

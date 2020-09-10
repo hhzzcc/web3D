@@ -10,8 +10,8 @@ export class Web3D {
     }
 
     async init(options = {}) {
-        const { appendDom = document.body } = options;
-        const { canvas, gl, program } = await this.initWebgl(appendDom);
+        const { width = 200, height = 200 } = options;
+        const { canvas, gl, program } = await this.initWebgl({ width, height });
         this.canvas = canvas;
         this.gl = gl;
         this.program = program;
@@ -21,15 +21,18 @@ export class Web3D {
         this.directionalLight = null;
         this.pointLight = null;
 
-        appendDom.appendChild(this.canvas);
+        return this.canvas;
+
+        // appendDom.appendChild(this.canvas);
     }
 
-    async initWebgl () {
+    async initWebgl ({ width, height }) {
         // 获取着色器代码
         const { vertexShaderText, fragmentShaderText } = await initShader();
         const canvas = document.createElement('canvas');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        canvas.id = '__web3d';
         const gl = canvas.getContext('webgl');
         const program = initProgram(gl, vertexShaderText, fragmentShaderText);
         return {

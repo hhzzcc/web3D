@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>web3D</title>
+    <style>
+        * {
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+        }
+
+        .navs {
+            width: 200px;
+            padding: 10px;
+        }
+
+        .nav {
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .nav__active {
+            color: #2e5ef8;
+        }
+
+        .nav:hover {
+            color: #2e5ef8;
+        }
+
+        iframe {
+            width: calc(100% - 200px);
+            height: 100vh;
+            min-height: 500px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="navs"></div>
+    <iframe></iframe>
+    <script>
+        
+
+        const createNavs = () => {
+            const navs = [
+                { title: '地球和木箱', to: './normal/index.html' },
+                { title: '第一人称视角(鼠标点击屏幕)', to: './game/index.html' },
+            ];
+            const $navs = document.querySelector('.navs');
+            const $iframe = document.querySelector('iframe');
+            navs.forEach((nav, i) => {
+                const $nav = document.createElement('div');
+
+                const active = () => {
+                    const $prevActiveNav = document.querySelector('.nav__active');
+                    $prevActiveNav && $prevActiveNav.classList.remove('nav__active');
+                    $nav.classList.add('nav__active');
+                    $iframe.src = nav.to;
+                };
+
+                $nav.className = 'nav';
+                $nav.textContent = nav.title;
+
+                if (i === 0) active();
+                $nav.onclick = active;
+
+                $navs.appendChild($nav);
+            });
+        };
+
+        const init = () => {
+            createNavs();
+        };
+
+        init();
+    </script>
+</body>
+</html>

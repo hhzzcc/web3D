@@ -19,10 +19,14 @@ const loadImage = src => {
 const start = async () => {
     
     const web3D = new Web3D();
-    await web3D.init();
+    const parentDom = document.querySelector('.web3d');
+    const width = parentDom.offsetWidth;
+    const height = parentDom.offsetHeight;
+    const web3dDom = await web3D.init({ width, height });
+    parentDom.appendChild(web3dDom);
 
     // 透视投影相机
-    const camera = new CameraPerspective({ fov: Math.PI / 6, aspect: window.innerWidth / window.innerHeight });
+    const camera = new CameraPerspective({ fov: Math.PI / 6, aspect: width / height });
 
 
     // 地球
@@ -56,17 +60,13 @@ const start = async () => {
     web3D.add(lightDirectional);
     web3D.add(lightPoint);
 
-    camera.setPosition({ x: 0, y: 0, z: 10 });
+    camera.move({ x: 0, y: 0, z: 10 });
+    camera.lookAt(0, 0, 0);
     earthMesh.setPosition({ x: 0, y: 1, z: 0 });
     boxMesh.setPosition({ x: 0, y: -1, z: 0 });
 
 
     const animated = () => {
-        // camera.setPosition({ x: 0, y: 0, z: 0.01 });
-
-        earthMesh.setPosition({ x: 0.001, y: 0.001, z: 0.001 });
-        // earthMesh.setPosition({ x: 0, y: 0.01, z: 0 });
-        // boxMesh.rotate({ x: 1, y: 1, z: 0, delta: 0.01 });
         boxMesh.rotate({ x: 1, y: 0, z: 0, delta: 0.01 });
         earthMesh.rotate({ x: 0, y: 1, z: 0, delta: 0.01 });
         web3D.draw();
