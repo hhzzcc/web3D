@@ -3,7 +3,7 @@
 #### 使用原生webgl打造类似three.js的简单3d框架，属于个人周末空闲时间创造的玩具，顺便练练手
 
 
-[demo 地址](https://hhzzcc.github.io/web3D/views/demos)
+[demo 地址](http://139.9.192.234:1234/views/demos/)
 
 
 
