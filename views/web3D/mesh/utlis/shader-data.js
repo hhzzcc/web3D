@@ -17,6 +17,7 @@ export const getAttributes = (gl, mesh) => {
         parseColor = position.map((_, i) => color[i % 3]);
     }
 
+
     return {
         position: {
             data: position,
@@ -40,13 +41,13 @@ export const getAttributes = (gl, mesh) => {
             data: index,
             buffer: createElementArrayBuffer(gl, index)
         },
-        texture: image ? {
+        texture: {
             texture: gl.createTexture(),
             data: texture,
             type: 'FLOAT',
             n: 2,
             buffer: createArrayBuffer(gl, texture)
-        } : null
+        }
     };
 };
 

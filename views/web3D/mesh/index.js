@@ -80,7 +80,7 @@ export class Mesh {
             x || this.position[0],
             y || this.position[1],
             z || this.position[2]
-        ]
+        ];
         this.computedTranslateMatrix();
     }
 

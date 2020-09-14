@@ -127,38 +127,44 @@ export class Web3D {
             const mesh = this.meshs[i];
             const attributes = mesh.getAttributes();
             const material = mesh.getMaterial();
+            const image = mesh.material.getImage();
 
             // 顶点数据
             for (const key in attributes) {
                 const value = attributes[key];
+                // 顶点索引
                 if (key === 'index') {
-                    // 顶点索引
                     this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, value.buffer);
-                    this.gl.bufferData(this.gl.ELEMENT_ARRAY_BUFFER, value.data, this.gl.STATIC_DRAW);
                 }
+                // 顶点纹理
+                else if (key === 'texture') {
+                    // 是否开启纹理
+                    const isOpenTexture = !!image;
+                    this.gl.uniform1i(this.gl.getUniformLocation(this.program, 'useTexture'), isOpenTexture ? 1 : 0);
+                    if (!isOpenTexture) continue; 
+
+                    const { texture } = value;
+                    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, value.buffer);
+                    const location = this.gl.getAttribLocation(this.program, key);
+                    this.gl.vertexAttribPointer(location, value.n, this.gl[value.type], false, 0, 0);
+                    this.gl.enableVertexAttribArray(location);
+                    const uSamplerLoaction = this.gl.getUniformLocation(this.program, 'uSampler');
+                    this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
+                    this.gl.activeTexture(this.gl.TEXTURE0);
+                    this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
+                    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
+                    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
+                    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
+                    this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
+                    this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, this.gl.RGB, this.gl.UNSIGNED_BYTE, image);
+                    this.gl.uniform1i(uSamplerLoaction, 0);
+                }
+                // 顶点位置、顶点颜色、顶点法线
                 else if (value) {
                     this.gl.bindBuffer(this.gl.ARRAY_BUFFER, value.buffer);
                     const location = this.gl.getAttribLocation(this.program, key);
                     this.gl.vertexAttribPointer(location, value.n, this.gl[value.type], false, 0, 0);
                     this.gl.enableVertexAttribArray(location);
-                    if (key === 'texture') {
-                        const { texture } = value;
-                        const image = mesh.material.getImage();
-                        if (image) {
-                            const uSamplerLoaction = this.gl.getUniformLocation(this.program, 'uSampler');
-                            this.gl.pixelStorei(this.gl.UNPACK_FLIP_Y_WEBGL, 1);
-                            this.gl.activeTexture(this.gl.TEXTURE0);
-                            this.gl.bindTexture(this.gl.TEXTURE_2D, texture);
-                            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MIN_FILTER, this.gl.NEAREST);
-                            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_MAG_FILTER, this.gl.NEAREST);
-                            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_S, this.gl.CLAMP_TO_EDGE);
-                            this.gl.texParameteri(this.gl.TEXTURE_2D, this.gl.TEXTURE_WRAP_T, this.gl.CLAMP_TO_EDGE);
-                            this.gl.texImage2D(this.gl.TEXTURE_2D, 0, this.gl.RGB, this.gl.RGB, this.gl.UNSIGNED_BYTE, image);
-                            this.gl.uniform1i(uSamplerLoaction, 0);
-                        }
-                        // 是否开启纹理
-                        this.gl.uniform1i(this.gl.getUniformLocation(this.program, 'useTexture'), image ? 1 : 0);
-                    }
                 }
             }
 

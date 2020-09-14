@@ -1,5 +1,7 @@
+import { Geometry } from '../../../web3D/geometry/index.js';
+
 // https://webglfundamentals.org/webgl/lessons/webgl-load-obj.html
-export const parseOBJ = (text) => {
+const parseOBJ = (text) => {
     // because indices are base 1 let's just fill in the 0th data
     const objPositions = [[0, 0, 0]];
     const objTexcoords = [[0, 0]];
@@ -17,11 +19,11 @@ export const parseOBJ = (text) => {
       [],   // positions
       [],   // texcoords
       [],   // normals
+      [],   //index
     ];
   
     const materialLibs = [];
     const geometries = [];
-    let index = [];
     let geometry;
     let groups = ['default'];
     let material = 'default';
@@ -42,10 +44,12 @@ export const parseOBJ = (text) => {
         const position = [];
         const texcoord = [];
         const normal = [];
+        const index = [];
         webglVertexData = [
           position,
           texcoord,
           normal,
+          index,
         ];
         geometry = {
           object,
@@ -55,36 +59,15 @@ export const parseOBJ = (text) => {
             position,
             texcoord,
             normal,
+            index
           },
         };
         geometries.push(geometry);
       }
     }
 
-    
-  
-    // function addVertex(vert) {
-    //   const ptn = vert.split('/');
-    //   index.push(...ptn);
-    //   const indices = ptn.forEach((objIndexStr, i) => {
-    //     if (!objIndexStr) {
-    //       return;
-    //     }
-    //     const objIndex = parseInt(objIndexStr);
-    //     return objIndex + (objIndex >= 0 ? 0 : objVertexData[i].length);
-    //   });
-    //   ptn.forEach((objIndexStr, i) => {
-    //     if (!objIndexStr) {
-    //       return;
-    //     }
-    //     const objIndex = parseInt(objIndexStr);
-    //     const index = objIndex + (objIndex >= 0 ? 0 : objVertexData[i].length);
-    //     webglVertexData[i].push(...objVertexData[i][index]);
-    //   });
-    // }
-
     const idToIndexMap = {}
-    const webglIndices = [];
+    let webglIndices = [];
      
     function addVertex(vert) {
       const ptn = vert.split('/');
@@ -132,6 +115,8 @@ export const parseOBJ = (text) => {
           addVertex(parts[tri + 1]);
           addVertex(parts[tri + 2]);
         }
+        geometry.data.index.push(...webglIndices);
+        webglIndices = [];
       },
       s: noop,    // smoothing group
       mtllib(parts, unparsedArgs) {
@@ -180,10 +165,24 @@ export const parseOBJ = (text) => {
           Object.entries(geometry.data).filter(([, array]) => array.length > 0));
     }
 
-    geometry.data.index = webglIndices;
-
     return {
       geometries,
       materialLibs,
     };
+};
+
+
+export const loadObj = async url => {
+    const data = await fetch(url).then(res => res.text());
+    const obj = parseOBJ(data);
+    const geometries = obj.geometries.map(g => {
+        const { position, normal, texcoord, index } = g.data;
+        const geometry = new Geometry();
+        geometry.setPosition(position);
+        geometry.setNormal(normal);
+        geometry.setTexture(texcoord);
+        geometry.setIndex(index);
+        return geometry;
+    });
+    return geometries;
 };
