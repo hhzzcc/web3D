@@ -11,14 +11,26 @@ export class Mesh {
         this.material = material;
 
         this.position = [0, 0, 0];
+
         this.rotateX = 0;
         this.rotateY = 0;
         this.rotateZ = 0;
-        this.delta = 0;
+        this.rotateDelta = 0;
 
+        this.revolutionX = 0;
+        this.revolutionY = 0;
+        this.revolutionZ = 0;
+        this.revolutionDelta = 0;
+
+        // 所有矩阵总和
         this.meshMatrix = create();
+        // 平移矩阵
         this.translateMatrix = create();
+        // 自转矩阵
         this.rotateMatrix = create();
+        // 公转矩阵
+        this.revolutionMatrix = create();
+        // 法线矩阵
         this.normalMatrix = create();
 
         this.attributes = null;
@@ -57,43 +69,45 @@ export class Mesh {
         return this.normalMatrix; 
     }
 
-    // 计算法线变换后的矩阵
-    computedNormalMatrix() {
-        invert(this.normalMatrix, this.meshMatrix);
-        transpose(this.normalMatrix, this.normalMatrix);
+    getPosition() {
+        return this.position;
     }
 
-    // 计算并更新平移后的矩阵
-    computedTranslateMatrix() {
-        translate(this.translateMatrix, this.translateMatrix, this.position);
-        multiply(this.meshMatrix, this.translateMatrix, this.rotateMatrix);
-    }
-
-    // 计算并更新旋转后的矩阵
-    computedRotateMatrix() {
-        rotate(this.rotateMatrix, this.rotateMatrix, this.delta, [this.rotateX, this.rotateY, this.rotateZ]);
-        multiply(this.meshMatrix, this.translateMatrix, this.rotateMatrix);
-    }
-
+    // 平移
     move({ x, y, z }) {
         this.position = [
-            x || this.position[0],
-            y || this.position[1],
-            z || this.position[2]
+            (x || 0) + this.position[0],
+            (y || 0) + this.position[1],
+            (z || 0) + this.position[2]
         ];
-        this.computedTranslateMatrix();
+        translate(this.translateMatrix, create(), this.position);
     }
 
+    // 自转
     rotate({ x, y, z, delta }) {
         this.rotateX = x;
         this.rotateY = y;
         this.rotateZ = z;
-        this.delta = delta;
-        this.computedRotateMatrix();
-        this.computedNormalMatrix();
+        this.rotateDelta += delta;
+        rotate(this.rotateMatrix, create(), this.rotateDelta, [this.rotateX, this.rotateY, this.rotateZ]);
     }
 
-    getPosition() {
-        return this.position;
+    // 公转
+    revolution({ x, y, z, delta }) {
+        this.revolutionX = x;
+        this.revolutionY = y;
+        this.revolutionZ = z;
+        this.revolutionDelta += delta;
+        rotate(this.revolutionMatrix, create(), this.revolutionDelta, [this.revolutionX, this.revolutionY, this.revolutionZ]);
+    }
+
+    // 更新所有矩阵(draw调用)
+    computedMeshMatrix() {
+        const meshMatrix = create();
+        multiply(meshMatrix, this.translateMatrix, this.rotateMatrix);
+        multiply(meshMatrix, this.revolutionMatrix, meshMatrix);
+        invert(this.normalMatrix, meshMatrix);
+        transpose(this.normalMatrix, this.normalMatrix);
+        this.meshMatrix = meshMatrix;
     }
 };

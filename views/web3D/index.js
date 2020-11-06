@@ -2,12 +2,12 @@ import { initShader } from './shader/index.js';
 import { initProgram } from './program.js';
 import { Camera } from './camera/index.js';
 import { Mesh } from './mesh/index.js';
+import { Group } from './group/index.js';
 import { LightAmbient, LightDirectional, LightPoint } from './light/index.js';
 import { MaterialPhone } from './material/index.js';
 
 export class Web3D {
-    constructor() {
-    }
+    constructor() {}
 
     async init(options = {}) {
         const { width = 200, height = 200 } = options;
@@ -48,6 +48,13 @@ export class Web3D {
                 obj.setAttributes(this.gl);
                 this.meshs.push(obj);
             }
+            if (obj instanceof Group) {
+                const meshs = obj.getMeshs();
+                meshs.forEach(mesh => {
+                    mesh.setAttributes(this.gl);
+                    this.meshs.push(mesh);
+                });
+            }
             if (obj instanceof Camera) {
                 this.camera = obj;
             }
@@ -71,6 +78,8 @@ export class Web3D {
 
     updateCamera() {
         if (this.camera) {
+            // 更新计算所有矩阵
+            this.camera.computedCameraMatrix();
             // 相机变换矩阵
             const cameraMatrixLocation = this.gl.getUniformLocation(this.program, 'cameraMatrix');
             const cameraMatrix = this.camera.getCameraMatrix();
@@ -122,9 +131,11 @@ export class Web3D {
         );
     }
 
-    drawMeshs() {
+    drawMeshs(drawMode) {
         for (let i = 0; i < this.meshs.length; i++) {
             const mesh = this.meshs[i];
+            // 更新计算所有矩阵
+            mesh.computedMeshMatrix();
             const attributes = mesh.getAttributes();
             const material = mesh.getMaterial();
             const image = mesh.material.getImage();
@@ -181,11 +192,11 @@ export class Web3D {
             const usePhoneMaterialLocation = this.gl.getUniformLocation(this.program, 'usePhoneMaterial');
             this.gl.uniform1i(usePhoneMaterialLocation, material instanceof MaterialPhone ? 1 : 0);
 
-            this.gl.drawElements(this.gl.TRIANGLES, attributes.index.data.length, this.gl.UNSIGNED_SHORT, 0);
+            this.gl.drawElements(this.gl[drawMode], attributes.index.data.length, this.gl.UNSIGNED_SHORT, 0);
         }
     }
 
-    draw() {
+    draw(drawMode = 'TRIANGLES') {
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
         this.gl.clearDepth(1.0);
         this.gl.enable(this.gl.DEPTH_TEST);
@@ -193,6 +204,6 @@ export class Web3D {
 
         this.updateCamera();
         this.updateLight();
-        this.drawMeshs();
+        this.drawMeshs(drawMode);
     }
 };

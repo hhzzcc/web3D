@@ -9,7 +9,6 @@ export const getAttributes = (gl, mesh) => {
     const normal = new Float32Array(geometry.getNormal());
     const texture = new Float32Array(geometry.getTexture());
     const index = new Uint16Array(geometry.getIndex());
-    const image = material.getImage();
     const color = new Float32Array(material.getColor());
 
     let parseColor = color;
