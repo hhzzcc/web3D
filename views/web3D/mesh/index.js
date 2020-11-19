@@ -2,8 +2,9 @@ import { getAttributes, getUniforms, getOther } from './utlis/shader-data.js';
 import { create, translate, rotate, invert, transpose, multiply } from '../utils/math.js';
 
 export class Mesh {
-    constructor(geometry, material) {
+    constructor(geometry, material, options = {}) {
         this.init(geometry, material);
+        this.isOpenShadow = !!options.isOpenShadow;
     }
 
     init(geometry, material) {
@@ -34,6 +35,7 @@ export class Mesh {
         this.normalMatrix = create();
 
         this.attributes = null;
+
     }
 
     // 设置顶点数据对应shader attribute类型数据，需要传入gl，生成相应buffer

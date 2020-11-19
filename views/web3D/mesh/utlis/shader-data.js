@@ -9,13 +9,17 @@ export const getAttributes = (gl, mesh) => {
     const normal = new Float32Array(geometry.getNormal());
     const texture = new Float32Array(geometry.getTexture());
     const index = new Uint16Array(geometry.getIndex());
-    const color = new Float32Array(material.getColor());
+    // const color = new Float32Array(material.getColor());
 
-    let parseColor = color;
-    if (color && color.length === 3) {
-        parseColor = position.map((_, i) => color[i % 3]);
+    // let parseColor = color;
+    // if (color && color.length === 3) {
+    //     parseColor = position.map((_, i) => color[i % 3]);
+    // }
+
+
+    if (!texture.length) {
+        console.warn('[web3D wraning] no texture');
     }
-
 
     return {
         position: {
@@ -30,12 +34,12 @@ export const getAttributes = (gl, mesh) => {
             n: 3,
             buffer: createArrayBuffer(gl, normal)
         },
-        color: {
-            data: parseColor,
-            type: 'FLOAT',
-            n: 3,
-            buffer: createArrayBuffer(gl, parseColor)
-        },
+        // color: {
+        //     data: parseColor,
+        //     type: 'FLOAT',
+        //     n: 3,
+        //     buffer: createArrayBuffer(gl, parseColor)
+        // },
         index: {
             data: index,
             buffer: createElementArrayBuffer(gl, index)

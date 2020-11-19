@@ -4,31 +4,14 @@ export class Camera {
     constructor() {
         this.position = [0, 0, 0];
         this.view = [0, 0, 0];
-
         this.cameraMatrix = create();
-        this.perspectiveMatrix = create();
-        this.viewMatrix = create();
-        
-    }
+        this.projectMatrix = create();
 
-    // 平移
-    move({ x, y, z }) {
-        this.position = [
-            this.position[0] + x,
-            this.position[1] + y,
-            this.position[2] + z
-        ];
-        this.lookAt(this.view[0] + x, this.view[1] + y, this.view[2] + z);
     }
 
     // 视角
     lookAt(x, y, z) {
         this.view = [x, y, z];
-        lookAt(this.viewMatrix, this.position,  this.view, [0, 1, 0]);
-    }
-
-    computedCameraMatrix() {
-        multiply(this.cameraMatrix, this.perspectiveMatrix, this.viewMatrix);
     }
 
     getCameraMatrix() {
@@ -41,5 +24,22 @@ export class Camera {
 
     getPosition() {
         return this.position;
+    }
+
+    // 平移
+    move({ x, y, z }) {
+        this.position = [
+            (x || 0) + this.position[0],
+            (y || 0) + this.position[1],
+            (z || 0) + this.position[2]
+        ];
+    }
+
+
+    // 更新所有矩阵(draw调用)
+    computedCameraMatrix() {
+        const viewMatrix = lookAt([], this.position, this.view, [0, 1, 0]);
+        const cameraMatrix = multiply([], this.projectMatrix, viewMatrix);
+        this.cameraMatrix = cameraMatrix;
     }
 }

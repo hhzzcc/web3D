@@ -22,7 +22,7 @@ const start = async () => {
     // 箱子
     const boxMesh = new Mesh(
         new GeometryCube({ l: 1, w: 1, h: 1 }),
-        new MaterialBase({ color: [0.5, 0.5, 1] })
+        new MaterialBase({ color: '#2254f4' })
     );
 
     // 环境光
@@ -33,7 +33,7 @@ const start = async () => {
         camera,
         boxMesh,
         lightAmbient
-    ])
+    ]);
 
     camera.move({ x: 5, y: 5, z: 10 });
     camera.lookAt(0, 0, 0);

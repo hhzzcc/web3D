@@ -46,7 +46,7 @@ const start = async () => {
     const lightAmbient = new LightAmbient({ color: [1, 1, 1], strength: 0.3 });
 
     // 平行光
-    const lightDirectional = new LightDirectional({ position: [-5, 0, 2], strength: 0.5 });
+    const lightDirectional = new LightDirectional({ position: [10, 0, 2], strength: 0.5 });
 
     // 点光源
     const lightPoint = new LightPoint({ position: [10, 10, 2], strength: 1.0 });
@@ -60,8 +60,8 @@ const start = async () => {
         lightPoint
     ]);
 
-    camera.move({ x: 50, y: 50, z: 80 });
-    camera.lookAt(0, 0, 0);
+    camera.move({ x: 100, y: 50, z: 100 });
+    camera.lookAt(-10, 0, 0);
     m4Meshs[0].move({ x: 20 });
 
     const animated = () => {

@@ -1,15 +1,16 @@
+import { parseColor } from '../utils/parse.js';
 export class Light {
     constructor() {
         this.position = [0, 0, 0];
-        this.color = [1, 1, 1];
+        this.color = '#fff';
         this.strength = 1;
     }
 
     move({ x, y, z }) {
         this.position = [
-            x || this.position[0],
-            y || this.position[1],
-            z || this.position[2],
+            this.position[0] + (x || 0),
+            this.position[1] + (y || 0),
+            this.position[2] + (z || 0),
         ];
     }
 
@@ -18,7 +19,7 @@ export class Light {
     }
 
     setColor(color) {
-        this.color = color;
+        this.color = parseColor(color);
     }
 
     getColor() {

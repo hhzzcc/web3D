@@ -20,11 +20,11 @@ const start = async () => {
     // 箱子
     const boxMesh = new Mesh(
         new GeometryCube({ l: 1, w: 1, h: 1 }),
-        new MaterialBase({ color: [0.5, 0.5, 1] })
+        new MaterialBase({ color: '#2254f4' })
     );
 
     // 环境光
-    const lightAmbient = new LightAmbient({ color: [1, 1, 1], strength: 0.3 });
+    const lightAmbient = new LightAmbient({ color: '#fff', strength: 0.3 });
 
     // 平行光
     const lightDirectional = new LightDirectional({ position: [-5, 0, 2], strength: 0.5 });

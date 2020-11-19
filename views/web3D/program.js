@@ -26,7 +26,7 @@ export const initProgram = (gl, vsSource, fsSource) => {
         )
         return null
     }
-    gl.useProgram(shaderProgram)
+    // gl.useProgram(shaderProgram)
 
     return shaderProgram
 }

@@ -3,8 +3,9 @@ import { Material } from "./material.js";
 export class MaterialBase extends Material {
     constructor(options = {}) {
         super();
-        const { color = [1, 1, 1], image } = options;
-        this.setColor(color);
-        this.setImage(image);
+        const { color = '#fff', image, drawMode } = options;
+        color && this.setColor(color);
+        image && this.setImage(image);
+        drawMode && this.setDrawMode(drawMode);
     }
 };
