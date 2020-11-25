@@ -22,7 +22,7 @@ const start = async () => {
     const geometry = await loadObj('./models/bunny.obj');
     const boxMesh = new Mesh(
         geometry,
-        new MaterialPhone()
+        new MaterialPhone({ color: '#777' })
     );
 
     // 环境光

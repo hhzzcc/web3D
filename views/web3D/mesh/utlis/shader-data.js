@@ -6,8 +6,8 @@ export const getAttributes = (gl, mesh) => {
     const material = mesh.getMaterial();
 
     const position = new Float32Array(geometry.getPosition());
-    const normal = new Float32Array(geometry.getNormal());
-    const texture = new Float32Array(geometry.getTexture());
+    const normal = new Float32Array(geometry.getNormal() || position);
+    const texture = new Float32Array(geometry.getTexture() || position.filter((_, i) => (i + 1) % 3 !== 0));
     const index = new Uint16Array(geometry.getIndex());
     // const color = new Float32Array(material.getColor());
 

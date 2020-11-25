@@ -186,8 +186,7 @@ export class Web3D {
             // 更新计算所有矩阵
             mesh.computedMeshMatrix();
             const attributes = mesh.getAttributes();
-            const material = mesh.getMaterial();
-            const drawMode = material.getDrawMode();
+            const drawMode = mesh.drawMode;
 
             // 顶点数据
             for (const key in attributes) {
@@ -244,7 +243,8 @@ export class Web3D {
             const attributes = mesh.getAttributes();
             const material = mesh.getMaterial();
             const image = mesh.material.getImage();
-            const drawMode = material.getDrawMode();
+            const drawMode = mesh.drawMode;
+            const drawType = mesh.drawType;
 
             // 顶点数据
             for (const key in attributes) {
@@ -300,8 +300,18 @@ export class Web3D {
             // 使用高光
             const usePhoneMaterialLocation = this.gl.getUniformLocation(this.program, 'usePhoneMaterial');
             this.gl.uniform1i(usePhoneMaterialLocation, material instanceof MaterialPhone ? 1 : 0);
+               
+            if (drawMode === 'POINTS') {
+                const pointSizeLocation = this.gl.getUniformLocation(this.program, 'pointSize');
+                this.gl.uniform1f(pointSizeLocation, mesh.pointSize);
+            }
 
-            this.gl.drawElements(this.gl[drawMode], attributes.index.data.length, this.gl.UNSIGNED_SHORT, 0);
+            if (!attributes.index.data.length || drawType === 'drawArrays') {
+                this.gl.drawArrays(this.gl[drawMode], 0, attributes.position.data.length / 3);
+            }
+            else {
+                this.gl.drawElements(this.gl[drawMode], attributes.index.data.length, this.gl.UNSIGNED_SHORT, 0);
+            }
         }
     }
 

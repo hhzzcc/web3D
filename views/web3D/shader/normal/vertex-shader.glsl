@@ -9,6 +9,8 @@ uniform mat4 normalMatrix;
 uniform mat4 cameraMatrix;
 uniform mat4 shadowLightCameraMatrix;
 
+uniform float pointSize;
+
 
 varying vec3 vNormal;
 varying vec3 vColor;
@@ -23,6 +25,10 @@ void main() {
     vPosition = (meshMatrix * vec4(position, 1.0)).xyz;
     vTexture = texture;
     vPositionFromLight = shadowLightCameraMatrix * meshMatrix * vec4(position, 1.0);
+
+    if (pointSize > 0.0) {
+        gl_PointSize = pointSize; 
+    }
 
     gl_Position = cameraMatrix * meshMatrix * vec4(position, 1.0);
 }

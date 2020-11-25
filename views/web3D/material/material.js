@@ -3,7 +3,6 @@ export class Material {
     constructor() {
         this.image = null;
         this.color = null;
-        this.drawMode = 'TRIANGLES';
     }
 
     setColor(color) {
@@ -21,21 +20,11 @@ export class Material {
         this.image = image;
     }
 
-    setDrawMode(drawMode) {
-        this.drawMode = drawMode;
-    }
-
     getColor() {
         return this.color;
     }
 
     getImage() {
         return this.image;
-    }
-
-    getDrawMode() {
-        return this.drawMode;
-    }
-
-    
+    }    
 };

@@ -49,8 +49,10 @@ const start = async () => {
     // 方块2
     const boxMesh2 = new Mesh(
         new GeometryCube({ l: 1, w: 1, h: 1 }),
-        new MaterialBase({ color: '#2254f4', drawMode: 'LINE_LOOP' }),
-        { isOpenShadow: true }
+        new MaterialBase({ color: '#2254f4' }),
+        {
+            isOpenShadow: true,
+            drawMode: 'LINE_LOOP' }
     );
     boxMesh2.move({ x: 1.5, y: 0, z: 0 });
 

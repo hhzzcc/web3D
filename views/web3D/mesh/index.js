@@ -3,8 +3,12 @@ import { create, translate, rotate, invert, transpose, multiply } from '../utils
 
 export class Mesh {
     constructor(geometry, material, options = {}) {
+        const { isOpenShadow = false, drawMode = 'TRIANGLES', drawType = 'drawElements', pointSize = 1 } = options;
+        this.isOpenShadow = isOpenShadow;
+        this.drawMode = drawMode;
+        this.drawType = drawType;
+        this.pointSize = pointSize;
         this.init(geometry, material);
-        this.isOpenShadow = !!options.isOpenShadow;
     }
 
     init(geometry, material) {
@@ -36,15 +40,25 @@ export class Mesh {
 
         this.attributes = null;
 
+        this.gl = null;
     }
 
     // 设置顶点数据对应shader attribute类型数据，需要传入gl，生成相应buffer
     setAttributes(gl) {
+        if (!this.gl) {
+            this.gl = gl;
+        }
         this.attributes = getAttributes(gl, this);
     }
 
     getAttributes() {
         return this.attributes;
+    }
+
+    updateAttributes() {
+        if (this.gl) {
+            this.attributes = getAttributes(this.gl, this);
+        }
     }
 
     setGeometry(geometry) {
