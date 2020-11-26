@@ -25,11 +25,11 @@ const start = async () => {
     const mesh = new Mesh(
         geometry,
         new MaterialBase({ color: '#fff' }),
-        { drawMode: 'POINTS', pointSize: 2 }
+        { drawMode: 'POINTS', pointSize: 4 }
     );
 
 
-    mesh.rotate({ x: 1, y: 0, z: 0, delta: -Math.PI / 3 });
+    mesh.rotate({ x: 1, y: 0, z: 0, delta: -Math.PI / 2.5 });
 
     
 
@@ -53,7 +53,7 @@ const start = async () => {
         const position = geometry.getPosition();
         const newPosition = position.map((p, i) => {
             if ((i + 1) % 3 === 0) {
-                return p + Math.sin(s + i * 2) / 100;
+                return Math.sin(s + i * 2) / 5;
             }
             return p;
         });
