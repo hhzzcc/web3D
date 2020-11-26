@@ -6,6 +6,7 @@ varying vec3 vColor;
 varying vec3 vPosition;
 varying vec2 vTexture;
 varying vec4 vPositionFromLight;
+varying float vDist;
 
 uniform vec3 cameraPosition;
 
@@ -22,11 +23,14 @@ uniform vec3 pointLightPosition;
 
 uniform int usePhoneMaterial;
 
-uniform int useTexture;
 uniform sampler2D uSampler;
 
 uniform int useShadow;
 uniform sampler2D uShadowSampler;
+
+uniform int useFog;
+uniform vec3 fogColor;
+uniform vec2 fogDist;
 
 
 float computeShadow(vec3 lightPosition) {
@@ -78,23 +82,22 @@ void main() {
         lightColor += sColor;
     }
 
+    // 纹理
+    vec4 fragColor = vec4(lightColor, 1.0) * texture2D(uSampler, vTexture);
 
     // 阴影
-    float visibility = 1.0;
     if (useShadow == 1) {
-        visibility = computeShadow(pointLightPosition);
-    }
-
-    vec4 fragColor;
-    // 纹理
-    if (useTexture == 1) {
-        fragColor = vec4(lightColor, 1.0) * texture2D(uSampler, vTexture);
-    }
-    else {
-        fragColor = vec4(lightColor * vec3(1.0, 1.0, 1.0), 1.0);
+        float visibility = computeShadow(pointLightPosition);
+        fragColor = vec4(fragColor.xyz * visibility, fragColor.w);
     }
     
 
-    gl_FragColor = vec4(fragColor.xyz * visibility, fragColor.w);
+    // 雾化
+    if (useFog == 1) {
+        float fogFacotr = clamp((fogDist.y - vDist) / (fogDist.y, fogDist.x), 0.0, 1.0);
+        fragColor = vec4(mix(fogColor, vec3(fragColor), fogFacotr), fragColor.w);
+    }
+    
+    gl_FragColor = fragColor;
 
 }

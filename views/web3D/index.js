@@ -257,7 +257,6 @@ export class Web3D {
                 else if (key === 'texture') {
                     // 是否开启纹理
                     const isOpenTexture = !!value.data.length;
-                    this.gl.uniform1i(this.gl.getUniformLocation(this.program, 'useTexture'), isOpenTexture ? 1 : 0);
                     if (!isOpenTexture) {
                         continue;
                     }
@@ -286,7 +285,6 @@ export class Web3D {
                 }
             }
 
-
             // 顶点变换矩阵
             const meshMatrixLocation = this.gl.getUniformLocation(this.program, 'meshMatrix');
             const meshMatrix = mesh.getMeshMatrix();
@@ -298,14 +296,26 @@ export class Web3D {
             this.gl.uniformMatrix4fv(normalMatrixLocation, false, normalMatrix);
 
             // 使用高光
-            const usePhoneMaterialLocation = this.gl.getUniformLocation(this.program, 'usePhoneMaterial');
-            this.gl.uniform1i(usePhoneMaterialLocation, material instanceof MaterialPhone ? 1 : 0);
-               
+            if (material instanceof MaterialPhone) {
+                const usePhoneMaterialLocation = this.gl.getUniformLocation(this.program, 'usePhoneMaterial');
+                this.gl.uniform1i(usePhoneMaterialLocation, 1);
+            }
+            
+
+            // 雾化
+            if (mesh.fogColor && mesh.fogDist) {
+                this.gl.uniform1i(this.gl.getUniformLocation(this.program, 'useFog'), 1);
+                this.gl.uniform3fv(this.gl.getUniformLocation(this.program, 'fogColor'), new Float32Array(mesh.fogColor));
+                this.gl.uniform2fv(this.gl.getUniformLocation(this.program, 'fogDist'), new Float32Array(mesh.fogDist));
+            }
+
+            // 绘制点
             if (drawMode === 'POINTS') {
                 const pointSizeLocation = this.gl.getUniformLocation(this.program, 'pointSize');
                 this.gl.uniform1f(pointSizeLocation, mesh.pointSize);
             }
 
+            // 没有索引数据时
             if (!attributes.index.data.length || drawType === 'drawArrays') {
                 this.gl.drawArrays(this.gl[drawMode], 0, attributes.position.data.length / 3);
             }
@@ -316,8 +326,8 @@ export class Web3D {
     }
 
     clear() {
-        this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-        this.gl.clearDepth(1.0);
+        this.gl.clearColor(0, 0, 0, 1);
+        this.gl.clearDepth(1);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
         this.gl.enable(this.gl.DEPTH_TEST);
     }
@@ -327,5 +337,6 @@ export class Web3D {
         this.updateCamera();
         this.updateLight();
         this.drawMeshs();
+        return this;
     }
 };

@@ -1,10 +1,19 @@
 import { getAttributes, getUniforms, getOther } from './utlis/shader-data.js';
 import { create, translate, rotate, invert, transpose, multiply } from '../utils/math.js';
+import { parseColor } from '../utils/parse.js';
 
 export class Mesh {
     constructor(geometry, material, options = {}) {
-        const { isOpenShadow = false, drawMode = 'TRIANGLES', drawType = 'drawElements', pointSize = 1 } = options;
+        const {
+            isOpenShadow = false,
+            fogColor,
+            fogDist,
+            drawMode = 'TRIANGLES',
+            drawType = 'drawElements',
+            pointSize = 1 } = options;
         this.isOpenShadow = isOpenShadow;
+        this.fogColor = fogColor && parseColor(fogColor);
+        this.fogDist = fogDist;
         this.drawMode = drawMode;
         this.drawType = drawType;
         this.pointSize = pointSize;
@@ -41,6 +50,14 @@ export class Mesh {
         this.attributes = null;
 
         this.gl = null;
+    }
+
+    setFogColor(fogColor) {
+        this.fogColor = parseColor(fogColor);
+    }
+
+    setFogDist(fogDist) {
+        this.fogDist = parseColor(fogDist);
     }
 
     // 设置顶点数据对应shader attribute类型数据，需要传入gl，生成相应buffer

@@ -17,6 +17,7 @@ varying vec3 vColor;
 varying vec3 vPosition;
 varying vec2 vTexture;
 varying vec4 vPositionFromLight;
+varying float vDist;
 
 
 void main() {
@@ -31,4 +32,5 @@ void main() {
     }
 
     gl_Position = cameraMatrix * meshMatrix * vec4(position, 1.0);
+    vDist = gl_Position.w;
 }
