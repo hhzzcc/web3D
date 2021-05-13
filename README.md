@@ -2,19 +2,19 @@
 
 #### webgl打造简单3d渲染框架
 
-[所有示例](http://139.9.192.234:1234/views/demos)<br>
-[基础正方体](http://139.9.192.234:1234/views/demos/cube)<br>
-[基础光照](http://139.9.192.234:1234/views/demos/light)<br>
-[高光材质](http://139.9.192.234:1234/views/demos/phone)<br>
-[纹理](http://139.9.192.234:1234/views/demos/texture)<br>
-[基础动画(旋转和平移)](http://139.9.192.234:1234/views/demos/animated)<br>
-[组和组动画](http://139.9.192.234:1234/views/demos/group)<br>
-[obj模型](http://139.9.192.234:1234/views/demos/obj)<br>
-[AWM & M4A1](http://139.9.192.234:1234/views/demos/gun)<br>
-[粒子效果](http://139.9.192.234:1234/views/demos/point)<br>
-[雾化](http://139.9.192.234:1234/views/demos/fog/)<br>
-[第一人称(鼠标点击屏幕)](http://139.9.192.234:1234/views/demos/view)<br>
-[阴影(鼠标点击屏幕)](http://139.9.192.234:1234/views/demos/shadow/)<br>
+[所有示例](http://121.5.76.237:1234/views/demos)<br>
+[基础正方体](http://121.5.76.237:1234/views/demos/cube)<br>
+[基础光照](http://121.5.76.237:1234/views/demos/light)<br>
+[高光材质](http://121.5.76.237:1234/views/demos/phone)<br>
+[纹理](http://121.5.76.237:1234/views/demos/texture)<br>
+[基础动画(旋转和平移)](http://121.5.76.237:1234/views/demos/animated)<br>
+[组和组动画](http://121.5.76.237:1234/views/demos/group)<br>
+[obj模型](http://121.5.76.237:1234/views/demos/obj)<br>
+[AWM & M4A1](http://121.5.76.237:1234/views/demos/gun)<br>
+[粒子效果](http://121.5.76.237:1234/views/demos/point)<br>
+[雾化](http://121.5.76.237:1234/views/demos/fog/)<br>
+[第一人称(鼠标点击屏幕)](http://121.5.76.237:1234/views/demos/view)<br>
+[阴影(鼠标点击屏幕)](http://121.5.76.237:1234/views/demos/shadow/)<br>
 
 #### 运行
 ```bash
@@ -25,7 +25,7 @@ yarn or npm i
 yarn serve or npm run serve
 
 # 打开浏览器输入
-localhost:1234/view/demos
+localhost:1234/views/demos
 
 ```
 
@@ -121,4 +121,4 @@ start();
 </html>
 ```
 
-[运行结果](http://139.9.192.234:1234/views/demos/phone)<br>
+[运行结果](http://121.5.76.237:1234/views/demos/phone)<br>
